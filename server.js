@@ -7,9 +7,10 @@ const Config = require('./Config');
 const ipFilter = require('koa-ip');
 const {google} = require('googleapis');
 const auth = require('./auth');
+let oauthClient = '';
 
 auth((authClient) => {
-    console.log(authClient)
+    oauthClient = authClient;
 });
 
 const app = new Koa();
@@ -18,12 +19,14 @@ let router = new Router();
 app.use(logger());
 app.use(bodyParser());
 app.use(cors());
-/*app.use(ipFilter({
-    whitelist: ['207.97.227.253', '50.57.128.197', '108.171.174.178'],
-    handler: async(ctx) => {
-        ctx.status = 403
-    }
-}));*/
+if (Config.production) {
+    app.use(ipFilter({
+        whitelist: ['207.97.227.253', '50.57.128.197', '108.171.174.178'],
+        handler: async(ctx) => {
+            ctx.status = 403
+        }
+    }));
+}
 
 
 router.post('/hook', (ctx, next) => {
@@ -58,8 +61,8 @@ router.post('/hook', (ctx, next) => {
 
     let html = getHtml(body);
     console.log(html);
-    let text = getText(body);
-    console.log(text);
+
+    sendEmail(subject, html);
 
 
     ctx.status = 200;
@@ -67,17 +70,6 @@ router.post('/hook', (ctx, next) => {
         "passed": true
     }
 });
-
-let getText = (body) => {
-    let content = '@' + body.sender.login + ' pushed ' + body.commits.length
-        + (body.commits.length > 1 ? ' commits\n': ' commit.\n');
-
-    for (let commit of body.commits) {
-        content+='\n' + commit.id.substr(0,7) + '  ' + commit.message;
-    }
-
-    return content
-};
 
 let getHtml = (body) => {
 
@@ -95,6 +87,40 @@ let getHtml = (body) => {
     return content;
 };
 
+let sendEmail = (subject, content) => {
+    let gmailClass = google.gmail('v1');
+
+    let email_lines = [];
+
+    email_lines.push('From: "' + Config.mail.from + '" <' + Config.mail.fromEmail + '>');
+    email_lines.push('To: ' + Config.mail.to[0]);
+    email_lines.push('Content-type: text/html;charset=iso-8859-1');
+    email_lines.push('MIME-Version: 1.0');
+    email_lines.push('Subject: ' + subject);
+    email_lines.push('');
+    content = content.split('\n');
+    for (let con of content)
+        email_lines.push(con);
+
+    let email = email_lines.join('\r\n').trim();
+
+    let base64EncodedEmail = new Buffer(email).toString('base64');
+    base64EncodedEmail = base64EncodedEmail.replace(/\+/g, '-').replace(/\//g, '_');
+
+    gmailClass.users.messages.send({
+        auth: oauthClient,
+        userId: 'me',
+        resource: {
+            raw: base64EncodedEmail
+        }
+    }, (err, results) => {
+        if (err) {
+            console.log('err:', err);
+        } else {
+            console.log(results);
+        }
+    });
+};
 
 app.use(router.routes());
 app.use(router.allowedMethods());
