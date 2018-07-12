@@ -8,16 +8,17 @@ Simple node server to send emails on push webhook.
 `npm install`
 
 ##Usage
-### Preparation step (this step is required only if you are using two-step verification) 
+### Preparation
 
-Configure application-specific passwords for your GMail account
-(if you are not using two-step verification, just skip this step and use same password you are using to login to GMail)
+Navigate to the Google developer console and create a new project. 
+Enable the gmail API and create a set of credentials for your app.
+Download the credentials as a json file, rename it to `client_secret.json`
+and put it in the root folder of the project.
 
-To be able send emails using GMail from any application (including Node.js) you need to generate application-specific password to access GMail:
-[My Account](https://myaccount.google.com/) -> [Sign-in & security](https://myaccount.google.com/security) -> [Signing in to Google](https://myaccount.google.com/security#signin) -> [App passwords](https://security.google.com/settings/security/apppasswords?utm_source=OGB&pli=1)
-
-Select 'Other (Custom name)' in 'Select app'/'Select device' drop-downs, enter descriptive name for your application and device and press 'GENERATE'.
-Copy provided password.
+When you run this, a new window should open prompting you to login.
+Complete the login, authorize the permissions, and copy and paste the 
+code you receive into the terminal, hitting enter afterwards. You should'nt
+have to login more than once as the refresh token is stored.
 
 ###Configure
 
@@ -30,11 +31,9 @@ module.exports = {
     PORT: 8888, // Port app will run on
     repoRegex: ['example/.+', 'example/myRepo'], //You can use regex strings to match a variety of origin repos or just one
     mail: {
-        user: 'user@gmail.com', //Gmail login username
-        pass: 'abcdefghijklmnop', //Application password found in last step
-        from: 'user@gmail.com', //The user the email will appear to originate from
+        from: 'Person', //The user the email will appear to originate from
+        fromEmail: 'user@gmail.com', // The address the email will appear to originate from;
         to: ['user1@gmail.com', 'user2@gmail.com'], //An array of people to send the email to
-        sendHtml: true //If false, application will send text version of email instead of html version
     }
 };
 ```
