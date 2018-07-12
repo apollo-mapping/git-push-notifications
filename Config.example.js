@@ -1,3 +1,4 @@
 module.exports = {
-    PORT: 8888
+    PORT: 8888,
+    repoRegex: ['example/.+', 'example/myRepo']
 };
