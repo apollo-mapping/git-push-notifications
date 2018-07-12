@@ -1,0 +1,19 @@
+{
+  "name": "git-push-notifications",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "version": "1.0.0",
+  "description": "A simple node server to catch github webhooks and send out email notifications.",
+  "main": "server.js",
+  "author": "Omer <eldaromer@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@koa/cors": "^2.2.2",
+    "koa": "^2.5.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0"
+  }
+}
