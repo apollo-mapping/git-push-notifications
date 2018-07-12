@@ -11,9 +11,14 @@
   "private": false,
   "dependencies": {
     "@koa/cors": "^2.2.2",
+    "google-auth-library": "^1.6.1",
+    "googleapis": "^32.0.0",
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
+    "koa-ip": "^1.0.0",
     "koa-logger": "^3.2.0",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "opn": "^5.3.0",
+    "readline-sync": "^1.4.9"
   }
 }
