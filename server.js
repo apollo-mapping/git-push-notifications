@@ -30,9 +30,9 @@ if (Config.production) {
 
 
 router.post('/hook', (ctx, next) => {
-    const body = ctx.request.body;
+    let body = ctx.request.body;
 
-    console.log(JSON.parse(body.payload));
+    body = JSON.parse(body.payload);
     if (!body.pusher) {
         ctx.status = 422;
         ctx.body = {
