@@ -6,6 +6,7 @@ const {google} = require('googleapis');
 const SCOPES = ['https://www.googleapis.com/auth/gmail.send'];
 const TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
+console.log(TOKEN_DIR);
 const TOKEN_PATH = TOKEN_DIR + 'gmail-token.json';
 
 module.exports = (callback) => {
@@ -36,6 +37,7 @@ function getNewToken(oauth2Client, callback) {
         scope: SCOPES
     });
     opn(authUrl);
+    console.log("This is your auth url: " + authUrl);
     let code = readline.question('Enter the code you got here: ');
     oauth2Client.getToken(code, function(err, token) {
         if (err) {

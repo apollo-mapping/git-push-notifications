@@ -1,13 +1,13 @@
-#Github Email Notifier
+# Github Email Notifier
 
 Simple node server to send emails on push webhook.
 
-##Install
+## Install
 `git clone https://github.com/apollomapping/git-push-notifications.git`
 
 `npm install`
 
-##Usage
+## Usage
 ### Preparation
 
 Navigate to the Google developer console and create a new project. 
@@ -20,7 +20,7 @@ Complete the login, authorize the permissions, and copy and paste the
 code you receive into the terminal, hitting enter afterwards. You should'nt
 have to login more than once as the refresh token is stored.
 
-###Configure
+### Configure
 
 `cp Config.example.js Config.js`
 
@@ -38,7 +38,7 @@ module.exports = {
 };
 ```
 
-###Set up webhook
+### Set up webhook
 
   1. Navigate to a repository you own, e.g., `https://github.com/user/repo`
   1. Click on *Settings* in the right sidebar
@@ -49,6 +49,6 @@ module.exports = {
   1. Select the radio button *Just the `push` event*
   1. Click on the green *Add Webhook* button
 
-###Run
+### Run
 
 `npm start`
