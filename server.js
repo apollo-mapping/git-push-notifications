@@ -63,7 +63,8 @@ router.post('/hook', (ctx, next) => {
     let html = getHtml(body);
     console.log(html);
 
-    sendEmail(subject, html);
+    for (let email of Config.mail.to)
+        sendEmail(subject, html, email);
 
 
     ctx.status = 200;
@@ -88,13 +89,13 @@ let getHtml = (body) => {
     return content;
 };
 
-let sendEmail = (subject, content) => {
+let sendEmail = (subject, content, to) => {
     let gmailClass = google.gmail('v1');
 
     let email_lines = [];
 
     email_lines.push('From: "' + Config.mail.from + '" <' + Config.mail.fromEmail + '>');
-    email_lines.push('To: ' + Config.mail.to[0]);
+    email_lines.push('To: ' + to);
     email_lines.push('Content-type: text/html;charset=iso-8859-1');
     email_lines.push('MIME-Version: 1.0');
     email_lines.push('Subject: ' + subject);
