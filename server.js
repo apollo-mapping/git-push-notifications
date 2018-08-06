@@ -32,6 +32,7 @@ if (Config.production) {
 router.post('/hook', (ctx, next) => {
     const body = ctx.request.body;
 
+    console.log(body);
     if (!body.pusher) {
         ctx.status = 422;
         ctx.body = {
